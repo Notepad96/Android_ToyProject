@@ -2,13 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/vLayoutMainPage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/vTxtEmptyList"
+        android:id="@+id/vTextEmptyList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="현재 작성된 메모가 없습니다."

@@ -1,19 +1,20 @@
 package com.example.notepadlist
 
 import android.content.Context
-import androidx.room.Room
-import androidx.room.RoomDatabase
+import androidx.room.*
+import androidx.sqlite.db.SupportSQLiteOpenHelper
 
-abstract class AppDatabase: RoomDatabase() {
+@Database(entities = arrayOf(Note::class), version = 1)
+abstract class AppDataBase: RoomDatabase() {
     abstract fun noteDao(): NoteDao
 
     companion object {
-        private var instance: AppDatabase? = null
+        private var instance: AppDataBase? = null
 
-        fun getInstance(context: Context): AppDatabase? {
+        fun getInstance(context: Context): AppDataBase? {
             if(instance == null) {
-                synchronized(AppDatabase::class) {
-                    instance = Room.databaseBuilder(context, AppDatabase::class.java, "note").build()
+                synchronized(AppDataBase::class) {
+                    instance = Room.databaseBuilder(context, AppDataBase::class.java, "noteDB").build()
                 }
             }
             return instance
@@ -23,4 +24,5 @@ abstract class AppDatabase: RoomDatabase() {
             instance = null
         }
     }
+
 }

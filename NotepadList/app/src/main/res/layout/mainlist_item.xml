@@ -6,7 +6,7 @@
     android:padding="5dp">
 
     <TextView
-        android:id="@+id/vTextMainListTitle"
+        android:id="@+id/vTextNoteListTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Title"
@@ -19,7 +19,7 @@
         android:background="#333333"/>
 
     <TextView
-        android:id="@+id/vTextMainListContent"
+        android:id="@+id/vTextNoteListContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Content"
@@ -27,7 +27,7 @@
         android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/vTextMainListLatest"
+        android:id="@+id/vTextNoteListLatest"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Title"

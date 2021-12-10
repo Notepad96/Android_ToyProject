@@ -7,17 +7,20 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     lateinit var mainAdapter: RecyclerView.Adapter<*>
     lateinit var mainManager: LinearLayoutManager
-    var db: AppDatabase? = null
+    var db: AppDataBase? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        db = AppDatabase.getInstance(this)
+        db = AppDataBase.getInstance(this)
         viewUpdate()
 
         mainManager = LinearLayoutManager(this)
@@ -34,13 +37,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun viewUpdate() {
-        if(db!!.noteDao().getAll().isEmpty()) {
-            vTxtEmptyList.visibility = View.VISIBLE
-            vListNotes.visibility = View.GONE
-        } else {
-            vTxtEmptyList.visibility = View.GONE
-            vListNotes.visibility = View.VISIBLE
+    private fun viewUpdate() {
+        CoroutineScope(Dispatchers.IO).launch {
+            if(db!!.noteDao().getAll().isEmpty()) {
+                vTextEmptyList.visibility = View.VISIBLE
+                vListNotes.visibility = View.GONE
+            } else {
+                vTextEmptyList.visibility = View.GONE
+                vListNotes.visibility = View.VISIBLE
+            }
         }
     }
 }
