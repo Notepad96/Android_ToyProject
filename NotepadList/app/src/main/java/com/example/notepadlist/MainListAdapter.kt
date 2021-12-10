@@ -1,11 +1,14 @@
 package com.example.notepadlist
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class MainListAdapter: RecyclerView.Adapter<MainListAdapter.ListViewHolder>() {
+class MainListAdapter(context: Context): RecyclerView.Adapter<MainListAdapter.ListViewHolder>() {
+    var db: AppDatabase? = AppDatabase.getInstance(context)
+    var list = db?.noteDao()?.getAll()
 
     class ListViewHolder(layout: View): RecyclerView.ViewHolder(layout)
 
@@ -18,6 +21,6 @@ class MainListAdapter: RecyclerView.Adapter<MainListAdapter.ListViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-        return 0
+        return list?.size ?: 0
     }
 }
