@@ -20,4 +20,16 @@ interface NoteDao {
 
     @Query("DELETE FROM notes")
     fun deleteAll()
+
+    @Query("UPDATE notes SET title = :title WHERE id = :id")
+    fun updateTitle(id: Long, title: String)
+
+    @Query("UPDATE notes SET content = :content WHERE id = :id")
+    fun updateContent(id: Long, content: String)
+
+    @Query("UPDATE notes SET latest = :latest WHERE id = :id")
+    fun updateLatest(id: Long, latest: Int)
+
+    @Query("SELECT * FROM notes")
+    fun getAll(): List<Note>
 }
