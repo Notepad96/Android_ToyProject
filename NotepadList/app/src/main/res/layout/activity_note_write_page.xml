@@ -42,6 +42,8 @@
         android:textSize="18sp"
         android:padding="5dp"
         android:gravity="start"
+        android:textCursorDrawable="@color/black"
+        android:textColorHighlight="#eeee22"
         android:text="\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
         />
 

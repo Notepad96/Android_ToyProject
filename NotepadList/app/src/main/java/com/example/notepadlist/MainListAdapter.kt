@@ -10,17 +10,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MainListAdapter(context: Context): RecyclerView.Adapter<MainListAdapter.ListViewHolder>() {
-    var db: AppDataBase? = AppDataBase.getInstance(context)
-    var list: List<Note>? = null
+class MainListAdapter(private val list: List<Note>?): RecyclerView.Adapter<MainListAdapter.ListViewHolder>() {
 
     class ListViewHolder(val layout: View): RecyclerView.ViewHolder(layout)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
-        CoroutineScope(Dispatchers.IO).launch {
-            list = db?.noteDao()?.getAll()
-        }
-
         return ListViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.mainlist_item, parent, false))
     }
 
@@ -33,4 +27,5 @@ class MainListAdapter(context: Context): RecyclerView.Adapter<MainListAdapter.Li
     override fun getItemCount(): Int {
         return list?.size ?: 0
     }
+
 }
