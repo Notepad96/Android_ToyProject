@@ -13,12 +13,26 @@ import java.text.SimpleDateFormat
 
 class NoteWritePage : AppCompatActivity() {
     var db: AppDataBase? = null
+    var mode = 0
+    var id = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_note_write_page)
 
         db = AppDataBase.getInstance(this)
+
+        mode = intent.getIntExtra("mode", 0)
+        // mode 0 = new, 1 = load
+        when(mode) {
+            0 -> {
+                vEditNoteWriteContent.setText("\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n")
+            }
+            1 -> {
+                id = intent.getLongExtra("id", 0)
+                loadNote(id)
+            }
+        }
 
         vBtnNoteWriteExit.setOnClickListener {
             exitDialog()
@@ -39,7 +53,10 @@ class NoteWritePage : AppCompatActivity() {
             setMessage("변경된 내용을 저장하시겠습니까?")
             setPositiveButton("OK", DialogInterface.OnClickListener { dialog, which ->
                 Toast.makeText(applicationContext, "저장 되었습니다!", Toast.LENGTH_LONG).show()
-                saveNote()
+                when(mode) {
+                    0 -> saveNote()
+                    1 -> updateNote()
+                }
                 finish()
             })
             setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, which ->
@@ -49,11 +66,30 @@ class NoteWritePage : AppCompatActivity() {
         }
     }
 
+    private fun getLatestTime(): String {
+        return SimpleDateFormat("yy/MM/dd - HH:mm:ss").format(System.currentTimeMillis())
+    }
+
     private fun saveNote() {
         CoroutineScope(Dispatchers.IO).launch {
-            var time = SimpleDateFormat("yy/MM/dd - HH:mm:ss").format(System.currentTimeMillis())
-            var newNote = Note(vEditNoteWriteTitle.text.toString().trim(), vEditNoteWriteContent.text.toString().trim(), time)
+            var newNote = Note(vEditNoteWriteTitle.text.toString().trim(), vEditNoteWriteContent.text.toString().trim(), getLatestTime())
             db!!.noteDao().insertNote(newNote)
+        }
+    }
+
+    private fun updateNote() {
+        CoroutineScope(Dispatchers.IO).launch {
+            var title = vEditNoteWriteTitle.text.toString().trim()
+            var content = vEditNoteWriteContent.text.toString().trim()
+            db!!.noteDao().updateNote(id, title, content, getLatestTime())
+        }
+    }
+
+    private fun loadNote(id: Long) {
+        CoroutineScope(Dispatchers.IO).launch {
+            var note = db!!.noteDao().getNote(id)
+            vEditNoteWriteTitle.setText(note.title)
+            vEditNoteWriteContent.setText(note.content)
         }
     }
 }

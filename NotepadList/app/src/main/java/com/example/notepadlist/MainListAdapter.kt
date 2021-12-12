@@ -1,6 +1,7 @@
 package com.example.notepadlist
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +23,13 @@ class MainListAdapter(private val list: List<Note>?): RecyclerView.Adapter<MainL
         holder.layout.vTextNoteListTitle.text = list!![position].title
         holder.layout.vTextNoteListContent.text = list!![position].content
         holder.layout.vTextNoteListLatest.text = list!![position].latest
+
+        holder.layout.vLayoutNoteListItem.setOnClickListener {
+            var intent = Intent(holder.layout.context, NoteWritePage::class.java)
+            intent.putExtra("mode", 1)
+            intent.putExtra("id", list!![position].id)
+            holder.layout.context.startActivity(intent)
+        }
     }
 
     override fun getItemCount(): Int {

@@ -20,6 +20,9 @@ interface NoteDao {
     @Query("DELETE FROM notes")
     fun deleteAll()
 
+    @Query("UPDATE notes SET title = :title, content = :content, latest = :latest WHERE id = :id")
+    fun updateNote(id: Long, title: String, content: String, latest: String)
+
     @Query("UPDATE notes SET title = :title WHERE id = :id")
     fun updateTitle(id: Long, title: String)
 
@@ -28,6 +31,9 @@ interface NoteDao {
 
     @Query("UPDATE notes SET latest = :latest WHERE id = :id")
     fun updateLatest(id: Long, latest: Int)
+
+    @Query("SELECT * FROM notes where id = :id")
+    fun getNote(id: Long): Note
 
     @Query("SELECT * FROM notes")
     fun getAll(): List<Note>

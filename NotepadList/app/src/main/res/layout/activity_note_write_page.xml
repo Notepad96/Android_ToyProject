@@ -44,7 +44,6 @@
         android:gravity="start"
         android:textCursorDrawable="@color/black"
         android:textColorHighlight="#eeee22"
-        android:text="\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
         />
 
 </LinearLayout>

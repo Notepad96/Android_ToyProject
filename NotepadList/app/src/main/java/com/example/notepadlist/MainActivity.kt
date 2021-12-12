@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity() {
 
         vFBtnAddNote.setOnClickListener {
             var intent = Intent(applicationContext, NoteWritePage::class.java)
+            intent.putExtra("mode", 0)
             startActivity(intent)
         }
     }
@@ -63,9 +64,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadList() {
-        CoroutineScope(Dispatchers.IO).launch {
-            list = db?.noteDao()?.getAll()
+        runBlocking {
+            CoroutineScope(Dispatchers.IO).launch {
+                list = db?.noteDao()?.getAll()
+            }.join()
         }
-        Thread.sleep(1000)
     }
 }
