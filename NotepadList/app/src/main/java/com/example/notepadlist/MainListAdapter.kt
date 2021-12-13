@@ -44,7 +44,8 @@ class MainListAdapter(private val list: List<Note>?): RecyclerView.Adapter<MainL
 
             layout.vTextNoteListItemDiaRemove.setOnClickListener {
                 CoroutineScope(Dispatchers.IO).launch {
-
+                    var db = AppDataBase.getInstance(holder.layout.context)
+                    db?.noteDao()?.deleteNote(list[position].id)
                 }
                 dialog.dismiss()
             }
