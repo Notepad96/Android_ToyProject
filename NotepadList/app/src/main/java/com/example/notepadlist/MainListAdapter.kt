@@ -43,6 +43,9 @@ class MainListAdapter(private val list: List<Note>?): RecyclerView.Adapter<MainL
             layout.vTextNoteListItemDiaTitle.setText(list!![position].title)
 
             layout.vTextNoteListItemDiaRemove.setOnClickListener {
+                CoroutineScope(Dispatchers.IO).launch {
+
+                }
                 dialog.dismiss()
             }
 
