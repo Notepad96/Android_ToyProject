@@ -36,5 +36,5 @@ interface NoteDao {
     fun getNote(id: Long): Note
 
     @Query("SELECT * FROM notes")
-    fun getAll(): List<Note>
+    fun getAll(): MutableList<Note>
 }

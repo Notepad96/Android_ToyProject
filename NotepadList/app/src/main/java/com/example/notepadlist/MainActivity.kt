@@ -1,5 +1,6 @@
 package com.example.notepadlist
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -17,7 +18,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var mainAdapter: RecyclerView.Adapter<*>
     lateinit var mainManager: LinearLayoutManager
     var db: AppDataBase? = null
-    var list: List<Note>? = null
+    var list: MutableList<Note>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +43,17 @@ class MainActivity : AppCompatActivity() {
         vFBtnAddNote.setOnClickListener {
             var intent = Intent(applicationContext, NoteWritePage::class.java)
             intent.putExtra("mode", 0)
-            startActivity(intent)
+//            startActivity(intent)
+            startActivityForResult(intent, 101)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == 101) {
+            if(resultCode == Activity.RESULT_OK) {
+                mainAdapter.notifyItemInserted(list!!.size)
+            }
         }
     }
 

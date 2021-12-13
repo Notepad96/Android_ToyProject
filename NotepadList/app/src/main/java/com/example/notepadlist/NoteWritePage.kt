@@ -26,7 +26,8 @@ class NoteWritePage : AppCompatActivity() {
         // mode 0 = new, 1 = load
         when(mode) {
             0 -> {
-                vEditNoteWriteContent.setText("\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n")
+                var text = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+                vEditNoteWriteContent.setText(text)
             }
             1 -> {
                 id = intent.getLongExtra("id", 0)
@@ -57,6 +58,7 @@ class NoteWritePage : AppCompatActivity() {
                     0 -> saveNote()
                     1 -> updateNote()
                 }
+                setResult(RESULT_OK)
                 finish()
             })
             setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, which ->

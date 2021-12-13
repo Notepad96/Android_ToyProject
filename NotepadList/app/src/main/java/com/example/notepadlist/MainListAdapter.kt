@@ -13,7 +13,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MainListAdapter(private val list: List<Note>?): RecyclerView.Adapter<MainListAdapter.ListViewHolder>() {
+class MainListAdapter(private val list: MutableList<Note>?): RecyclerView.Adapter<MainListAdapter.ListViewHolder>() {
 
     class ListViewHolder(val layout: View): RecyclerView.ViewHolder(layout)
 
@@ -47,6 +47,9 @@ class MainListAdapter(private val list: List<Note>?): RecyclerView.Adapter<MainL
                     var db = AppDataBase.getInstance(holder.layout.context)
                     db?.noteDao()?.deleteNote(list[position].id)
                 }
+                list.removeAt(position)
+                notifyItemRemoved(position)
+
                 dialog.dismiss()
             }
 
