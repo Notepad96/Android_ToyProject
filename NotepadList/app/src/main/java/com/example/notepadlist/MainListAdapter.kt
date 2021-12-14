@@ -4,6 +4,8 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -46,6 +48,7 @@ class MainListAdapter(private val list: MutableList<Note>?): RecyclerView.Adapte
                 setView(layout)
             }
             var dialog = build.create()
+            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             dialog.show()
             layout.vTextNoteListItemDiaTitle.setText(list!![position].title)
 
