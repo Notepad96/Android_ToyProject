@@ -5,12 +5,15 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.core.app.ActivityCompat
+import androidx.core.view.marginRight
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.mainlist_item.view.*
 import kotlinx.android.synthetic.main.mainlist_item_long_dialog.view.*
@@ -44,12 +47,18 @@ class MainListAdapter(private val list: MutableList<Note>?): RecyclerView.Adapte
 
         holder.layout.vLayoutNoteListItem.setOnLongClickListener {
             var layout = LayoutInflater.from(holder.layout.context).inflate(R.layout.mainlist_item_long_dialog, null)
+
             var build = AlertDialog.Builder(holder.layout.context).apply {
                 setView(layout)
             }
             var dialog = build.create()
             dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             dialog.show()
+
+            val width = (holder.layout.context.resources.displayMetrics.widthPixels * 0.75).toInt()
+            val height = (holder.layout.context.resources.displayMetrics.heightPixels * 0.3).toInt()
+            dialog.window?.setLayout(width, height)
+
             layout.vTextNoteListItemDiaTitle.setText(list!![position].title)
 
             layout.vTextNoteListItemDiaRemove.setOnClickListener {
@@ -62,6 +71,10 @@ class MainListAdapter(private val list: MutableList<Note>?): RecyclerView.Adapte
                 list.removeAt(position)
                 notifyItemRemoved(position)
 
+                dialog.dismiss()
+            }
+
+            layout.vTextNoteListItemDiaExit.setOnClickListener {
                 dialog.dismiss()
             }
 
