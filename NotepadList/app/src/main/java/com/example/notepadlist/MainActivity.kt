@@ -28,10 +28,6 @@ class MainActivity : AppCompatActivity() {
         viewUpdate()
         loadList()
 
-        if(list != null) {
-            for(note in list!!) Log.d("test", note.toString())
-        }
-        Log.d("test", list?.size.toString())
         mainManager = LinearLayoutManager(this)
         mainAdapter = MainListAdapter(list)
 
@@ -46,13 +42,34 @@ class MainActivity : AppCompatActivity() {
 //            startActivity(intent)
             startActivityForResult(intent, 101)
         }
+
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == 101) {
             if(resultCode == Activity.RESULT_OK) {
-                mainAdapter.notifyItemInserted(list!!.size)
+                Log.d("test", "In check")
+                val note = data?.getParcelableExtra<Note>("note")
+                note!!.id = data?.getLongExtra("id", 0L)
+                // mode 0 = insert, 1 = update
+                when(data?.getIntExtra("mode", 0)) {
+                    0 -> {
+                        list?.add(note!!)
+                        mainAdapter.notifyDataSetChanged()
+                    }
+                    1 -> {
+                        val pos = data.getIntExtra("pos", 0)
+
+                        list!![pos].title = note!!.title
+                        list!![pos].content = note.content
+                        list!![pos].latest = note.latest
+                        mainAdapter.notifyItemChanged(pos)
+                    }
+                }
+
+
             }
         }
     }
@@ -62,7 +79,7 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-    private fun viewUpdate() {
+    fun viewUpdate() {
         CoroutineScope(Dispatchers.IO).launch {
             if(db!!.noteDao().getAll().isEmpty()) {
                 vTextEmptyList.visibility = View.VISIBLE

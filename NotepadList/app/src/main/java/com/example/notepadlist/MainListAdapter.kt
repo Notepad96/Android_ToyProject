@@ -1,17 +1,21 @@
 package com.example.notepadlist
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.mainlist_item.view.*
 import kotlinx.android.synthetic.main.mainlist_item_long_dialog.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class MainListAdapter(private val list: MutableList<Note>?): RecyclerView.Adapter<MainListAdapter.ListViewHolder>() {
 
@@ -29,8 +33,11 @@ class MainListAdapter(private val list: MutableList<Note>?): RecyclerView.Adapte
         holder.layout.vLayoutNoteListItem.setOnClickListener {
             var intent = Intent(holder.layout.context, NoteWritePage::class.java)
             intent.putExtra("mode", 1)
+            intent.putExtra("pos", position)
             intent.putExtra("id", list!![position].id)
-            holder.layout.context.startActivity(intent)
+
+            ActivityCompat.startActivityForResult(holder.layout.context as Activity, intent, 101, null)
+//            holder.layout.context.startActivity(intent)
         }
 
         holder.layout.vLayoutNoteListItem.setOnLongClickListener {
@@ -43,9 +50,11 @@ class MainListAdapter(private val list: MutableList<Note>?): RecyclerView.Adapte
             layout.vTextNoteListItemDiaTitle.setText(list!![position].title)
 
             layout.vTextNoteListItemDiaRemove.setOnClickListener {
-                CoroutineScope(Dispatchers.IO).launch {
-                    var db = AppDataBase.getInstance(holder.layout.context)
-                    db?.noteDao()?.deleteNote(list[position].id)
+                runBlocking {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        var db = AppDataBase.getInstance(holder.layout.context)
+                        db?.noteDao()?.deleteNote(list[position].id)
+                    }.join()
                 }
                 list.removeAt(position)
                 notifyItemRemoved(position)

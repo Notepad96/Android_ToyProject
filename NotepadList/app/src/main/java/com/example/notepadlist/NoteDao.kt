@@ -1,9 +1,6 @@
 package com.example.notepadlist
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface NoteDao {
@@ -20,8 +17,11 @@ interface NoteDao {
     @Query("DELETE FROM notes")
     fun deleteAll()
 
-    @Query("UPDATE notes SET title = :title, content = :content, latest = :latest WHERE id = :id")
-    fun updateNote(id: Long, title: String, content: String, latest: String)
+//    @Query("UPDATE notes SET title = :title, content = :content, latest = :latest WHERE id = :id")
+//    fun updateNote(id: Long, title: String, content: String, latest: String)
+
+    @Update
+    fun updateNote(note: Note)
 
     @Query("UPDATE notes SET title = :title WHERE id = :id")
     fun updateTitle(id: Long, title: String)
@@ -33,7 +33,10 @@ interface NoteDao {
     fun updateLatest(id: Long, latest: Int)
 
     @Query("SELECT * FROM notes where id = :id")
-    fun getNote(id: Long): Note
+    fun getNoteID(id: Long): Note
+
+    @Query("SELECT * FROM notes where latest = :latest")
+    fun getNoteLatest(latest: String): Note
 
     @Query("SELECT * FROM notes")
     fun getAll(): MutableList<Note>
