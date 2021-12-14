@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_nav"
+    app:startDestination="@id/mainActivity">
+
+    <fragment
+        android:id="@+id/mainActivity"
+        android:name="com.example.notepadlist.MainActivity"
+        android:label="activity_main"
+        tools:layout="@layout/activity_main" >
+        <action
+            android:id="@+id/action_mainActivity_to_noteWritePage"
+            app:destination="@id/noteWritePage" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/noteWritePage"
+        android:name="com.example.notepadlist.NoteWritePage"
+        android:label="activity_note_write_page"
+        tools:layout="@layout/activity_note_write_page" />
+</navigation>
