@@ -56,7 +56,7 @@ class MainListAdapter(private val list: MutableList<Note>?): RecyclerView.Adapte
             dialog.show()
 
             val width = (holder.layout.context.resources.displayMetrics.widthPixels * 0.75).toInt()
-            val height = (holder.layout.context.resources.displayMetrics.heightPixels * 0.3).toInt()
+            val height = (holder.layout.context.resources.displayMetrics.heightPixels * 0.4).toInt()
             dialog.window?.setLayout(width, height)
 
             layout.vTextNoteListItemDiaTitle.setText(list!![position].title)
@@ -69,7 +69,9 @@ class MainListAdapter(private val list: MutableList<Note>?): RecyclerView.Adapte
                     }.join()
                 }
                 list.removeAt(position)
-                notifyItemRemoved(position)
+                notifyItemRemoved(position).apply {
+                    notifyDataSetChanged()
+                }
 
                 dialog.dismiss()
             }
