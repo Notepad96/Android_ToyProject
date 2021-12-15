@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat
 
 class NoteWritePage : AppCompatActivity() {
     var db: AppDataBase? = null
+    var emptySpace = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
     var mode = 0
     var id = 0L
     var pos = 0
@@ -30,8 +31,7 @@ class NoteWritePage : AppCompatActivity() {
         // mode 0 = new, 1 = load
         when(mode) {
             0 -> {
-                var text = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
-                vEditNoteWriteContent.setText(text)
+                vEditNoteWriteContent.setText(emptySpace)
             }
             1 -> {
                 id = intent.getLongExtra("id", 0)
@@ -85,7 +85,7 @@ class NoteWritePage : AppCompatActivity() {
 
     private fun saveNote(): Note {
         var latest = getLatestTime()
-        var newNote = Note(vEditNoteWriteTitle.text.toString().trim(), vEditNoteWriteContent.text.toString().trim(), latest)
+        var newNote = Note(vEditNoteWriteTitle.text.toString().trimEnd(), vEditNoteWriteContent.text.toString().trimEnd(), latest)
         runBlocking {
             CoroutineScope(Dispatchers.IO).launch {
                 db!!.noteDao().insertNote(newNote)
@@ -97,8 +97,8 @@ class NoteWritePage : AppCompatActivity() {
     }
 
     private fun updateNote(): Note {
-        var title = vEditNoteWriteTitle.text.toString().trim()
-        var content = vEditNoteWriteContent.text.toString().trim()
+        var title = vEditNoteWriteTitle.text.toString().trimEnd()
+        var content = vEditNoteWriteContent.text.toString().trimEnd()
         var changeNote = Note(title, content, getLatestTime())
         changeNote.id = id
         CoroutineScope(Dispatchers.IO).launch {
@@ -116,7 +116,6 @@ class NoteWritePage : AppCompatActivity() {
             }.join()
         }
         vEditNoteWriteTitle.setText(note.title)
-        vEditNoteWriteContent.setText(note.content)
-        Log.d("test", "${note.content}")
+        vEditNoteWriteContent.setText(note.content.plus(emptySpace))
     }
 }
