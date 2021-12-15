@@ -117,5 +117,6 @@ class NoteWritePage : AppCompatActivity() {
         }
         vEditNoteWriteTitle.setText(note.title)
         vEditNoteWriteContent.setText(note.content)
+        Log.d("test", "${note.content}")
     }
 }
