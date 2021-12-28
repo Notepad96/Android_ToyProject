@@ -17,6 +17,7 @@ import kotlinx.coroutines.runBlocking
 class MainActivity : AppCompatActivity() {
     lateinit var mainAdapter: RecyclerView.Adapter<*>
     lateinit var mainManager: LinearLayoutManager
+    lateinit var mainList: RecyclerView
     var db: AppDataBase? = null
     var list: MutableList<Note>? = null
 
@@ -31,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         mainManager = LinearLayoutManager(this)
         mainAdapter = MainListAdapter(list)
 
-        var mainList = vListNotes.apply {
+        mainList = vListNotes.apply {
             layoutManager = mainManager
             adapter = mainAdapter
         }
@@ -58,6 +59,8 @@ class MainActivity : AppCompatActivity() {
                     0 -> {
                         list?.add(note!!)
                         mainAdapter.notifyDataSetChanged()
+                        mainList.invalidate()
+                        viewUpdate()
                     }
                     1 -> {
                         val pos = data.getIntExtra("pos", 0)
