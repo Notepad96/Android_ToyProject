@@ -2,12 +2,14 @@ package com.example.notepadlist
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.mainlist_item.view.*
@@ -55,7 +57,7 @@ class MainListAdapter(private val list: MutableList<Note>?): RecyclerView.Adapte
             val height = (holder.layout.context.resources.displayMetrics.heightPixels * 0.4).toInt()
             dialog.window?.setLayout(width, height)
 
-            layout.vTextNoteListItemDiaTitle.setText(list!![position].title)
+            layout.vTextNoteListItemDiaTitle.text = list!![position].title
 
             layout.vTextNoteListItemDiaRemove.setOnClickListener {
                 runBlocking {
@@ -68,8 +70,8 @@ class MainListAdapter(private val list: MutableList<Note>?): RecyclerView.Adapte
                 notifyItemRemoved(position).apply {
                     notifyDataSetChanged()
                 }
-
                 dialog.dismiss()
+                if(list.isEmpty()) holder.layout.findViewById<TextView>(R.id.vTextEmptyList).visibility = View.VISIBLE
             }
 
             layout.vTextNoteListItemDiaExit.setOnClickListener {
