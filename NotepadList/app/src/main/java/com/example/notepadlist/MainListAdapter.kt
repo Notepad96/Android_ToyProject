@@ -2,14 +2,12 @@ package com.example.notepadlist
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.mainlist_item.view.*
@@ -19,68 +17,72 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
+
 class MainListAdapter(private val list: MutableList<Note>?): RecyclerView.Adapter<MainListAdapter.ListViewHolder>() {
 
     class ListViewHolder(val layout: View): RecyclerView.ViewHolder(layout)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
-        return ListViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.mainlist_item, parent, false))
+       return ListViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.mainlist_item, parent, false))
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        holder.layout.vTextNoteListTitle.text = list!![position].title
-        holder.layout.vTextNoteListContent.text = list!![position].content
-        holder.layout.vTextNoteListLatest.text = list!![position].latest
+            holder.layout.vTextNoteListTitle.text = list!![position].title
+            holder.layout.vTextNoteListContent.text = list!![position].content
+            holder.layout.vTextNoteListLatest.text = list!![position].latest
 
-        holder.layout.vLayoutNoteListItem.setOnClickListener {
-            var intent = Intent(holder.layout.context, NoteWritePage::class.java)
-            intent.putExtra("mode", 1)
-            intent.putExtra("pos", position)
-            intent.putExtra("id", list!![position].id)
+            holder.layout.vLayoutNoteListItem.setOnClickListener {
+                var intent = Intent(holder.layout.context, NoteWritePage::class.java)
+                intent.putExtra("mode", 1)
+                intent.putExtra("pos", position)
+                intent.putExtra("id", list!![position ].id)
 
 
-            ActivityCompat.startActivityForResult(holder.layout.context as Activity, intent, 101, null)
+                ActivityCompat.startActivityForResult(holder.layout.context as Activity, intent, 101, null)
 //            holder.layout.context.startActivity(intent)
-        }
-
-        holder.layout.vLayoutNoteListItem.setOnLongClickListener {
-            var layout = LayoutInflater.from(holder.layout.context).inflate(R.layout.mainlist_item_long_dialog, null)
-
-            var build = AlertDialog.Builder(holder.layout.context).apply {
-                setView(layout)
             }
-            var dialog = build.create()
-            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            dialog.show()
 
-            val width = (holder.layout.context.resources.displayMetrics.widthPixels * 0.75).toInt()
-            val height = (holder.layout.context.resources.displayMetrics.heightPixels * 0.4).toInt()
-            dialog.window?.setLayout(width, height)
+            holder.layout.vLayoutNoteListItem.setOnLongClickListener {
+                var layout = LayoutInflater.from(holder.layout.context).inflate(R.layout.mainlist_item_long_dialog, null)
 
-            layout.vTextNoteListItemDiaTitle.text = list!![position].title
-
-            layout.vTextNoteListItemDiaRemove.setOnClickListener {
-                runBlocking {
-                    CoroutineScope(Dispatchers.IO).launch {
-                        var db = AppDataBase.getInstance(holder.layout.context)
-                        db?.noteDao()?.deleteNote(list[position].id)
-                    }.join()
+                var build = AlertDialog.Builder(holder.layout.context).apply {
+                    setView(layout)
                 }
-                list.removeAt(position)
-                notifyItemRemoved(position).apply {
-                    notifyDataSetChanged()
+                var dialog = build.create()
+                dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                dialog.show()
+
+                val width = (holder.layout.context.resources.displayMetrics.widthPixels * 0.75).toInt()
+                val height = (holder.layout.context.resources.displayMetrics.heightPixels * 0.4).toInt()
+                dialog.window?.setLayout(width, height)
+
+                layout.vTextNoteListItemDiaTitle.text = list!![position].title
+
+                layout.vTextNoteListItemDiaRemove.setOnClickListener {
+                    runBlocking {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            var db = AppDataBase.getInstance(holder.layout.context)
+                            db?.noteDao()?.deleteNote(list[position].id)
+                        }.join()
+                    }
+                    list.removeAt(position)
+                    notifyItemRemoved(position).apply {
+                        notifyDataSetChanged()
+                    }
+                    dialog.dismiss()
+                    if(list.isEmpty()) {
+                        
+                    }
                 }
-                dialog.dismiss()
-                if(list.isEmpty()) holder.layout.findViewById<TextView>(R.id.vTextEmptyList).visibility = View.VISIBLE
-            }
 
-            layout.vTextNoteListItemDiaExit.setOnClickListener {
-                dialog.dismiss()
-            }
+                layout.vTextNoteListItemDiaExit.setOnClickListener {
+                    dialog.dismiss()
+                }
 
-            true
+                true
         }
     }
+
 
     override fun getItemCount(): Int {
         return list?.size ?: 0

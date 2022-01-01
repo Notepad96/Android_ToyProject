@@ -83,7 +83,7 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-    fun viewUpdate() {
+    private fun viewUpdate() {
         CoroutineScope(Dispatchers.IO).launch {
             if(db!!.noteDao().getAll().isEmpty()) {
                 vTextEmptyList.visibility = View.VISIBLE
