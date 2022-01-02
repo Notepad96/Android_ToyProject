@@ -1,7 +1,9 @@
-# Topic : Button Click Event
+# Topic : 메모장
 
 
-### https://notepad96.tistory.com/entry/Android-Kotlin-Click-Event
+### 기능
+1. 메모 작성/삭제/수정
+
 
 
 <br><br>
